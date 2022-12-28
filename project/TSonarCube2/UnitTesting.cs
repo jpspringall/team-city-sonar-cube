@@ -14,7 +14,7 @@ namespace TSonarCube2
         [Fact]
         public void Fail()
         {
-            42.Should().Be(42);
+            42.Should().Be(41);
 
         }
 
