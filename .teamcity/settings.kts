@@ -39,7 +39,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 'Debug' option is available in the context menu for the task.
 */
 
-version = "2023.11"
+version = "2024.03"
 
 object MasterBuild : BuildType({
     name = "Master Build"
