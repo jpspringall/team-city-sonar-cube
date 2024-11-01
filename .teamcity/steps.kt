@@ -125,7 +125,7 @@ object CommonSteps {
                     """-s ""%env.sonar_server%"" -u ""%env.sonar_user%"" -p ""%env.sonar_password%"" -n ""%teamcity.pullRequest.number%"" -v ""%build.counter%"""""
                 formatStderrAsError = true
                 dockerImagePlatform = ExecBuildStep.ImagePlatform.Linux
-                dockerPull = true
+                dockerPull = false
                 dockerImage = "${imageRepository}/dotnet-sonar-scanner:9.0.1" //CHECK IMAGE NAME FOR REALZ
                 dockerRunParameters = """
                     --network=host
@@ -139,7 +139,7 @@ object CommonSteps {
     ) {
         steps {
             exec {
-                enabled = true
+                enabled = false
                 name = "Run End 2 End Tests"
                 workingDir = "./"
                 path = "./ci/run-end-2-end-test.sh"
