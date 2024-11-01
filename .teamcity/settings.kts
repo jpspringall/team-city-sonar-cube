@@ -109,14 +109,14 @@ object PullRequestBuild : BuildType({
             }
         }
         commitStatusPublisher {
-            vcsRootExtId = "${HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild.id}"
+            vcsRootExtId = "${DslContext.settingsRootId}"
             publisher = github {
                 githubUrl = "https://api.github.com"
                 authType = vcsRoot()
             }
         }
         pullRequests {
-            vcsRootExtId = "${HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild.id}"
+            vcsRootExtId = "${DslContext.settingsRootId}"
             provider = github {
                 authType = vcsRoot()
                 filterSourceBranch = "refs/pull/*/merge"
