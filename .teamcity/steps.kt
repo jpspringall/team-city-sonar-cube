@@ -126,7 +126,7 @@ object CommonSteps {
                 formatStderrAsError = true
                 dockerImagePlatform = ExecBuildStep.ImagePlatform.Linux
                 dockerPull = true
-                dockerImage = "${imageRepository}/dotnet-sonar-scanner:5.8.0" //CHECK IMAGE NAME FOR REALZ
+                dockerImage = "${imageRepository}/dotnet-sonar-scanner:9.0.1" //CHECK IMAGE NAME FOR REALZ
                 dockerRunParameters = """
                     --network=host
                     -v %system.teamcity.build.checkoutDir%/test-results:/test-results
