@@ -183,9 +183,9 @@ object HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild : GitVcsRoot({
     branchSpec = "%git.branch.specification%"
     agentCleanPolicy = GitVcsRoot.AgentCleanPolicy.ALWAYS
     checkoutPolicy = GitVcsRoot.AgentCheckoutPolicy.NO_MIRRORS
-    authMethod = password {
-        userName = "jpspringall"
-        password = "credentialsJSON:e224d815-b2d6-4dc7-9e5c-11f7d85dbd51"
+    authMethod = token {
+        userName = "oauth2"
+        tokenId = "tc_token_id:CID_730d8fd765b6b9d789b1b514fdc46d66:-1:ea14ff39-5e97-44f2-81ee-884245e32f4c"
     }
 })
 
