@@ -1,10 +1,6 @@
 
 import jetbrains.buildServer.configs.kotlin.BuildType
-import jetbrains.buildServer.configs.kotlin.buildSteps.ExecBuildStep
-import jetbrains.buildServer.configs.kotlin.buildSteps.ScriptBuildStep
-import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
-import jetbrains.buildServer.configs.kotlin.buildSteps.exec
-import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.buildSteps.*
 
 object CommonSteps {
 
@@ -132,6 +128,7 @@ object CommonSteps {
                 dockerPull = true
                 dockerImage = "${imageRepository}/dotnet-sonar-scanner:5.8.0" //CHECK IMAGE NAME FOR REALZ
                 dockerRunParameters = """
+                    --network=host
                     -v %system.teamcity.build.checkoutDir%/test-results:/test-results
                 """.trimIndent()
             }
