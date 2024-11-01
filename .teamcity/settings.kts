@@ -79,7 +79,7 @@ object PullRequestBuild : BuildType({
     name = "Pull Request Build"
 
     vcs {
-        root(HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild)
+        root(DslContext.settingsRoot)
         cleanCheckout = true
         excludeDefaultBranchChanges = true
     }
