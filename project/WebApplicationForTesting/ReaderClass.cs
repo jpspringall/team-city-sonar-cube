@@ -2,9 +2,6 @@
 {
     public class ReaderClass : IDisposable
     {
-        public void Dispose()
-        {
-
-        }
+        public void Dispose() { }
     }
 }

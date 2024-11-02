@@ -47,7 +47,7 @@ namespace TCSonarCube
         [Fact]
         public void WriterTest()
         {
-            using (var u = new ReaderClass())
+            using (var u = new WriterClass())
             {
             }
 

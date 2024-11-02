@@ -2,9 +2,6 @@
 {
     public class WriterClass : IDisposable
     {
-        public void Dispose()
-        {
-
-        }
+        public void Dispose() { }
     }
 }
