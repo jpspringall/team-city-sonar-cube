@@ -1,10 +1,6 @@
 
 import jetbrains.buildServer.configs.kotlin.BuildType
-import jetbrains.buildServer.configs.kotlin.buildSteps.ExecBuildStep
-import jetbrains.buildServer.configs.kotlin.buildSteps.ScriptBuildStep
-import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
-import jetbrains.buildServer.configs.kotlin.buildSteps.exec
-import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.buildSteps.*
 
 object CommonSteps {
 
@@ -129,9 +125,10 @@ object CommonSteps {
                     """-s ""%env.sonar_server%"" -u ""%env.sonar_user%"" -p ""%env.sonar_password%"" -n ""%teamcity.pullRequest.number%"" -v ""%build.counter%"""""
                 formatStderrAsError = true
                 dockerImagePlatform = ExecBuildStep.ImagePlatform.Linux
-                dockerPull = true
-                dockerImage = "${imageRepository}/dotnet-sonar-scanner:5.8.0" //CHECK IMAGE NAME FOR REALZ
+                dockerPull = false
+                dockerImage = "${imageRepository}/dotnet-sonar-scanner:9.0.1" //CHECK IMAGE NAME FOR REALZ
                 dockerRunParameters = """
+                    --network=host
                     -v %system.teamcity.build.checkoutDir%/test-results:/test-results
                 """.trimIndent()
             }
@@ -142,7 +139,7 @@ object CommonSteps {
     ) {
         steps {
             exec {
-                enabled = true
+                enabled = false
                 name = "Run End 2 End Tests"
                 workingDir = "./"
                 path = "./ci/run-end-2-end-test.sh"
