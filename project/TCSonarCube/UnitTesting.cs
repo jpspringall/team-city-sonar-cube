@@ -1,4 +1,5 @@
 using FluentAssertions;
+using WebApplicationForTesting;
 using Xunit;
 
 namespace TCSonarCube
@@ -32,6 +33,25 @@ namespace TCSonarCube
         public void WebApp()
         {
             3.Should().Be(new WebApplicationForTesting.Controllers.WeatherForecastController().BuggyCodeBranch());
+        }
+
+        [Fact]
+        public void ReaderTest()
+        {
+            using (var u = new ReaderClass())
+            {
+            }
+            true.Should().BeTrue();
+        }
+
+        [Fact]
+        public void WriterTest()
+        {
+            using (var u = new ReaderClass())
+            {
+            }
+
+            true.Should().BeTrue();
         }
     }
 }
