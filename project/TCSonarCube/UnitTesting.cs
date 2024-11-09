@@ -38,20 +38,11 @@ namespace TCSonarCube
         [Fact]
         public void ReaderTest()
         {
-            using (var u = new ReaderClass())
+            using (var u = new DbReader())
             {
             }
             true.Should().BeTrue();
         }
 
-        [Fact]
-        public void WriterTest()
-        {
-            using (var u = new WriterClass())
-            {
-            }
-
-            true.Should().BeTrue();
-        }
     }
 }
