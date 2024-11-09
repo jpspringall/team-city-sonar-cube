@@ -3,8 +3,8 @@ set -e
 
 echo "Running Script"
 
-projectKey="SonarCubeTest"
-projectName="SonarCubeTest"
+projectKey="SonarQubeLocalhostTest"
+projectName="SonarQubeLocalhostTest"
 
 while getopts :s:u:p:n:v: flag
 do
