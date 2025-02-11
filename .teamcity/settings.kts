@@ -126,6 +126,54 @@ object PullRequestBuild : BuildType({
     }
 })
 
+object SubDeployBuild : BuildType({
+    name = "Sub Deploy Build"
+
+    vcs {
+        root(HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild)
+        cleanCheckout = true
+        excludeDefaultBranchChanges = true
+    }
+
+    buildNumberPattern = MasterBuild.depParamRefs.buildNumber.toString()
+
+    dependencies {
+        snapshot(MasterBuild) {
+            onDependencyFailure = FailureAction.FAIL_TO_START
+            onDependencyCancel = FailureAction.CANCEL
+        }
+    }
+
+    params {
+        param("git.branch.specification", "")
+    }
+
+    createParameters()
+
+    printDeployNumber()
+
+    triggers {
+        vcs {
+        }
+    }
+
+    features {}
+})
+
+val subBuilds: ArrayList<BuildType> = arrayListOf()
+
+subBuilds.add(SubDeployBuild)
+
+val subProject = Project {
+    vcsRoot(HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild)
+
+    subBuilds.forEach{
+        buildType(it)
+    }
+
+    buildTypesOrder = subBuilds
+}
+
 object DeployBuild : BuildType({
     name = "Deploy Build"
 
@@ -174,6 +222,8 @@ val project = Project {
     }
 
     buildTypesOrder = builds
+
+    subProject(subProject)
 }
 
 object HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild : GitVcsRoot({
@@ -190,7 +240,6 @@ object HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild : GitVcsRoot({
 })
 
 for (bt : BuildType in project.buildTypes ) {
-    bt.paused = false
     val gitSpec = bt.params.findRawParam("git.branch.specification")
     if (gitSpec != null && gitSpec.value.isNotBlank()) {
         bt.vcs.branchFilter = """
