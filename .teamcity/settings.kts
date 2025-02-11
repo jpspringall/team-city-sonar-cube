@@ -6,6 +6,7 @@ import CommonSteps.printPullRequestNumber
 import CommonSteps.runMakeTest
 import CommonSteps.runSonarScript
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.DslContext.createId
 import jetbrains.buildServer.configs.kotlin.buildFeatures.PullRequests
 import jetbrains.buildServer.configs.kotlin.buildFeatures.commitStatusPublisher
 import jetbrains.buildServer.configs.kotlin.buildFeatures.dockerSupport
@@ -165,7 +166,8 @@ val subBuilds: ArrayList<BuildType> = arrayListOf()
 subBuilds.add(SubDeployBuild)
 
 val subProject = Project {
-    vcsRoot(HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild)
+    id = createId("SubProject")
+    name = "SubProject"
 
     subBuilds.forEach{
         buildType(it)
