@@ -6,13 +6,11 @@ import CommonSteps.printPullRequestNumber
 import CommonSteps.runMakeTest
 import CommonSteps.runSonarScript
 import jetbrains.buildServer.configs.kotlin.*
-import jetbrains.buildServer.configs.kotlin.DslContext.createId
 import jetbrains.buildServer.configs.kotlin.buildFeatures.PullRequests
 import jetbrains.buildServer.configs.kotlin.buildFeatures.commitStatusPublisher
 import jetbrains.buildServer.configs.kotlin.buildFeatures.dockerSupport
 import jetbrains.buildServer.configs.kotlin.buildFeatures.pullRequests
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
-import jetbrains.buildServer.configs.kotlin.ui.add
 import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
 /*
@@ -38,6 +36,24 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 */
 
 version = "2024.03"
+
+val builds: ArrayList<BuildType> = arrayListOf()
+
+builds.add(MasterBuild)
+builds.add(PullRequestBuild)
+builds.add(DeployBuild)
+
+project {
+    vcsRoot(HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild)
+
+    builds.forEach{
+        buildType(it)
+    }
+
+    buildTypesOrder = builds
+
+    subProject(subProjectNoId)
+}
 
 object MasterBuild : BuildType({
     name = "Master Build"
@@ -165,16 +181,16 @@ val subBuilds: ArrayList<BuildType> = arrayListOf()
 
 subBuilds.add(SubDeployBuild)
 
-val subProject = Project {
-    id = createId("SubProject")
-    name = "SubProject"
+object subProjectNoId : Project ({
+    name = "SubProjectNoId"
 
-    subBuilds.forEach{
-        buildType(it)
-    }
 
-    buildTypesOrder = subBuilds
-}
+
+        buildType(SubDeployBuild)
+
+
+    buildTypesOrder = arrayListOf(MasterBuild, SubDeployBuild)
+})
 
 object DeployBuild : BuildType({
     name = "Deploy Build"
@@ -210,23 +226,6 @@ object DeployBuild : BuildType({
     features {}
 })
 
-val builds: ArrayList<BuildType> = arrayListOf()
-
-builds.add(MasterBuild)
-builds.add(PullRequestBuild)
-builds.add(DeployBuild)
-
-val project = Project {
-    vcsRoot(HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild)
-
-    builds.forEach{
-        buildType(it)
-    }
-
-    buildTypesOrder = builds
-
-    subProject(subProject)
-}
 
 object HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild : GitVcsRoot({
     name = "Build VCS Root"
@@ -241,24 +240,24 @@ object HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild : GitVcsRoot({
     }
 })
 
-for (bt : BuildType in project.buildTypes ) {
-    val gitSpec = bt.params.findRawParam("git.branch.specification")
-    if (gitSpec != null && gitSpec.value.isNotBlank()) {
-        bt.vcs.branchFilter = """
-            +:*
-            -:<default>
-        """.trimIndent()
-    }
-    if (bt.name == "Pull Request Build" || bt.name == "Master Build") {
-        bt.features.add {
-            feature {
-                type = "xml-report-plugin"
-                param("verbose", "true")
-                param("xmlReportParsing.reportType", "trx")
-                param("xmlReportParsing.reportDirs","%system.teamcity.build.checkoutDir%/test-results/**/*.trx")
-            }
-        }
-    }
+//for (bt : BuildType in project.buildTypes ) {
+//    val gitSpec = bt.params.findRawParam("git.branch.specification")
+//    if (gitSpec != null && gitSpec.value.isNotBlank()) {
+//        bt.vcs.branchFilter = """
+//            +:*
+//            -:<default>
+//        """.trimIndent()
+//    }
+//    if (bt.name == "Pull Request Build" || bt.name == "Master Build") {
+//        bt.features.add {
+//            feature {
+//                type = "xml-report-plugin"
+//                param("verbose", "true")
+//                param("xmlReportParsing.reportType", "trx")
+//                param("xmlReportParsing.reportDirs","%system.teamcity.build.checkoutDir%/test-results/**/*.trx")
+//            }
+//        }
+//    }
 //    if (bt.name == "Pull Request Build" || bt.name == "Master Build")
 //    {
 //        bt.features.add {  xmlReport {
@@ -267,6 +266,4 @@ for (bt : BuildType in project.buildTypes ) {
 //            verbose = true
 //        } }
 //    }
-}
-
-project(project)
+//}
