@@ -42,6 +42,7 @@ val builds: ArrayList<BuildType> = arrayListOf()
 builds.add(MasterBuild)
 builds.add(PullRequestBuild)
 builds.add(DeployBuild)
+builds.add(SubDeployBuild)
 
 project {
     vcsRoot(HttpsGithubComJpspringallTeamCitySonarCubeRefsHeadsBuild)
@@ -51,8 +52,6 @@ project {
     }
 
     buildTypesOrder = builds
-
-    subProject(subProjectNoId)
 }
 
 object MasterBuild : BuildType({
@@ -175,21 +174,6 @@ object SubDeployBuild : BuildType({
     }
 
     features {}
-})
-
-val subBuilds: ArrayList<BuildType> = arrayListOf()
-
-subBuilds.add(SubDeployBuild)
-
-object subProjectNoId : Project ({
-    name = "SubProjectNoId"
-
-
-
-        buildType(SubDeployBuild)
-
-
-    buildTypesOrder = arrayListOf(MasterBuild, SubDeployBuild)
 })
 
 object DeployBuild : BuildType({
